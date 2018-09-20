@@ -6,3 +6,4 @@ A basic scraper app for Twitter
 - get relative probabilities of words
 - push tweet corpus to json file
 - run basic analytics on corpi
+- integrate NLTK

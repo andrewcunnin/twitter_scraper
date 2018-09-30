@@ -58,5 +58,3 @@ def get_corpus(keyWord): #scrapes a default 100 tweets given a search term
 		for tweet in tweets:
 			str_var += tweet + " "
 		return(str_var)
-str_var = "hi hi hi this is me ok"
-print(str(get_probability(str_var, "hi")))

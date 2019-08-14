@@ -1,7 +1,9 @@
 import scraper.tweet_scraper as tweet_scraper
-import analyzer.tweet_analyzer as tweet_analyzer
+import analyzer.tweet_corpus as tweet_corpus
 
 tweets = tweet_scraper.scrape_text('hello', 100)
-my_analyzer = tweet_analyzer.TweetCorpus(tweets)
-print(my_analyzer.get_probability('hello'))
+tweet_corpus = tweet_corpus.TweetCorpus(tweets)
+print(tweet_corpus.text)
+print(tweet_corpus.get_p_word('hello'))
+print(tweet_corpus.get_p_bigram('#', '#'))
 #scraper.getRelativeFrequencies

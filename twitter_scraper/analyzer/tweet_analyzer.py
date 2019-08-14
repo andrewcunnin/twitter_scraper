@@ -23,21 +23,27 @@ def remove_word(word, tweet_text): #removes all occurrences of word from tweet_t
 def clean_tweet(tweet_text): #cleans tweet text
 	return remove_punctuation(remove_tweet_elems(remove_stops(tweet_text))).lower().strip();
 
-def clean_tweets(tweet_texts):
-	return [clean_tweet(tweet_text) for tweet_text in tweet_texts]
+def clean_tweets(tweets_text):
+	return [clean_tweet(tweet_text) for tweet_text in tweets_text]
 
 def remove_stops(tweet_text): #removes stop words from tweet_texting
 	for stop in stops:
 		tweet_text = remove_word(stop, tweet_text)
 	return tweet_text;
 
-def write_corpus_to_json(tweet_texts): #writes all tweet_text bodies to json given search terms
-	tweet_texts = clean_tweets(tweet_texts)
-	with open('my_tweet_corpus.json', 'w') as outfile:
-		(json.dump(tweet, outfile) for tweet in tweet_texts)
+class TweetCorpus:
+	def __init__(self, tweets):
+		self.tweets = tweets
+		tweets_text = [getattr(tweet, 'text') for tweet in tweets]
+		tweets_text = clean_tweets(tweets_text)
+		self.text = nltk.word_tokenize('# '+" # \n # ".join(tweets_text) + ' #')
+		self.fdist = nltk.FreqDist(self.text)
+		self.bigrams = nltk.bigrams(self.text)
 
-#TODO - make corpus object so that fdist can be defined for full object
-def get_probability(tweet_text, word): #finds frequency of word in tweet texts
-	arr = nltk.word_tokenize(tweet_text)
-	fdist = nltk.FreqDist(arr)
-	return fdist[word]/float(len(arr)) #should store distribution as a field for parse objects
+	def write_corpus_to_json(tweet_texts): #writes all tweet_text bodies to json given search terms
+		tweet_texts = clean_tweets(tweet_texts)
+		with open('my_tweet_corpus.json', 'w') as outfile:
+			(json.dump(tweet, outfile) for tweet in tweet_texts)
+
+	def get_probability(self, word): #finds probability of word in tweet texts
+		return self.fdist[word]/float(len(self.text)) #should store distribution as a field for parse objects
